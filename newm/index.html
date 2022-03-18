@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-signin-client_id"
+          content="489785482974-d5g8ggup9c9e1uod25lvbop0hpd4thgr.apps.googleusercontent.com">
+    <meta name="google-signin-scope" content="https://www.googleapis.com/auth/plus.login">
+    <title>NEWM Server Debug Home</title>
+</head>
+<body onload="onLoadHome()">
+<h2>NEWM Server Debug Home</h2>
+
+<div id="loggedOutDiv" style="display:none">
+    <form action="javascript:onLogin()">
+        <p><input id="email" placeholder="Email" required="required" type="email"/></p>
+        <p><input id="password" placeholder="Password" required="required" type="password"/></p>
+        <p>
+            <button type="submit">Login</button>
+        </p>
+    </form>
+    <hr/>
+    <p>
+    <div class="g-signin2" data-onsuccess="onGoogleLogin"></div>
+    </p>
+    <p>
+    <div class="fb-login-button" data-width="150" data-size="medium" data-button-type="login_with" data-layout="default"
+         data-auto-logout-link="false" data-use-continue-as="false" data-onlogin="onFacebookLogin"
+         data-scope="public_profile,email">Login with Facebook
+    </div>
+    </p>
+    <hr/>
+    <p><a href="join.html">Join</a></p>
+    <p><a href="recover.html">Forgot Password</a></p>
+</div>
+
+<div id="loggedInDiv" style="display:none">
+    <p><a href="jwt.html">JWT</a></p>
+    <p><a href="profile.html">Profile</a></p>
+    <p><a href="songs.html">Songs</a></p>
+    <hr>
+    <p>
+        <button onclick="onLogout()">Logout</button>
+        <button onclick="onDelete()">Delete Account</button>
+    </p>
+</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js" async></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script crossorigin="anonymous"
+        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=4171461756290307&autoLogAppEvents=1"
+        nonce="5Yhq76Bo" async defer></script>
+<script src="js/main.js" async></script>
+
+</body>
+</html>
