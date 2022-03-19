@@ -1,28 +1,21 @@
-const apiBaseUrl = 'https://newm-app-pip-wlara-cors-z40ymg.herokuapp.com'
+const homePath = '/newm'
+const apiBaseUrl = 'https://staging-newm-server.herokuapp.com'
 
 function onLoadHome() {
-    axios.get(apiBaseUrl + '/auth/jwt', {
-        withCredentials: true
-    })
-    .then(function (response) {
-        console.log(response);
-        document.getElementById('loggedInDiv').style.display = 'initial';
-    })
-    .catch(function (error) {
-        console.log(error);
+    if (localStorage.getItem('token') == null) {
         document.getElementById('loggedOutDiv').style.display = 'initial';
-        if (error.response.status != 401) {
-            alert(error);
-        }
-    });
+    } else {
+        document.getElementById('loggedInDiv').style.display = 'initial';
+    }
 }
 
 function onLogin() {
-    axios.post(apiBaseUrl + '/login?session', {
+    axios.post(apiBaseUrl + '/login', {
         email: document.getElementById('email').value,
         password: document.getElementById('password').value
     })
     .then(function (response) {
+        localStorage['token'] = response.data['token']
         console.log(response);
         location.reload();
     })
@@ -32,26 +25,47 @@ function onLogin() {
     });
 }
 
-function onOAuthLogin(name) {
-    const redirectUrl = encodeURIComponent(window.location.origin)
-    alert(redirectUrl)
-    const href = apiBaseUrl + '/login/' + name + '?redirectUrl=' + redirectUrl
-    alert(href)
-    window.location.href = href
+function onGoogleLogin(googleUser) {
+    axios.post(apiBaseUrl + '/login/google', {
+        accessToken: googleUser.getAuthResponse().access_token
+    })
+    .then(function (response) {
+        gapi.auth2.getAuthInstance().signOut();
+        localStorage['token'] = response.data['token']
+        console.log(response);
+        location.reload();
+    })
+    .catch(function (error) {
+        gapi.auth2.getAuthInstance().signOut();
+        console.log(error);
+        alert(error);
+    });
+}
+
+function onFacebookLogin() {
+   FB.getLoginStatus(function(response) {
+        if (response.status === 'connected') {
+            axios.post(apiBaseUrl + '/login/facebook', {
+                accessToken: response.authResponse.accessToken
+            })
+            .then(function (response) {
+                localStorage['token'] = response.data['token']
+                console.log(response);
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert(error);
+            });
+        } else {
+            alert('Login failed, status: ' + response.status)
+        }
+    });
 }
 
 function onLogout() {
-    axios.get(apiBaseUrl + '/logout', {
-        withCredentials: true
-    })
-    .then(function (response) {
-        console.log(response);
-        location.reload();
-    })
-    .catch(function (error) {
-        console.log(error);
-        alert(error);
-    });
+    localStorage.removeItem('token')
+    location.reload();
 }
 
 function onJoin() {
@@ -66,8 +80,8 @@ function onJoin() {
     })
     .then(function (response) {
         console.log(response);
-        alert("Successfully Joined!!!")
-        window.location.href = window.location.origin;
+        alert('Successfully Joined!!!')
+        window.location.href = homePath;
     })
     .catch(function (error) {
         console.log(error);
@@ -84,8 +98,8 @@ function onRecover() {
     })
     .then(function (response) {
         console.log(response);
-        alert("Successfully Recovered!!!")
-        window.location.href = window.location.origin;
+        alert('Successfully Recovered!!!')
+        window.location.href = homePath;
     })
     .catch(function (error) {
         console.log(error);
@@ -100,7 +114,7 @@ function onVerificationCode() {
     })
     .then(function (response) {
         console.log(response);
-        alert("Verification Code successfully send to: " + email)
+        alert('Verification Code successfully send to: ' + email)
     })
     .catch(function (error) {
         console.log(error);
@@ -110,7 +124,10 @@ function onVerificationCode() {
 
 function onLoadProfile() {
     axios.get(apiBaseUrl + '/v1/users/me', {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+            'Authorization': getBearerAuth()
+        }
     })
     .then(function (response) {
         console.log(response);
@@ -124,7 +141,10 @@ function onLoadProfile() {
 
 function onLoadJwt() {
     axios.get(apiBaseUrl + '/auth/jwt', {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+            'Authorization': getBearerAuth()
+        }
     })
     .then(function (response) {
         console.log(response);
@@ -139,6 +159,9 @@ function onLoadJwt() {
 function onLoadSongs() {
     axios.get(apiBaseUrl + '/v1/portal/songs', {
         withCredentials: true,
+        headers: {
+            'Authorization': getBearerAuth()
+        },
         transformResponse: body => body     // disable json parsing
     })
     .then(function (response) {
@@ -148,6 +171,10 @@ function onLoadSongs() {
     .catch(function (error) {
         console.log(error);
     });
+}
+
+function getBearerAuth() {
+    return 'Bearer ' + localStorage.getItem('token');
 }
 
 function loadJsonTable(tableId, jsonData) {
@@ -162,6 +189,6 @@ function loadJsonTable(tableId, jsonData) {
     }
 }
 
-String.prototype.nullIfEmpty = function(str) {
-    return  this == "" ? null : this;
+String.prototype.nullIfEmpty = function() {
+    return this == '' ? null : this;
 }
