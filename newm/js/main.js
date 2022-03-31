@@ -89,6 +89,25 @@ function onJoin() {
     });
 }
 
+function onDelete() {
+    axios.delete(apiBaseUrl + '/v1/users/me', {
+        withCredentials: true,
+        headers: {
+            'Authorization': getBearerAuth()
+        }
+    })
+    .then(function (response) {
+        console.log(response);
+        localStorage.removeItem('token')
+        alert('Account Deleted!!!')
+        location.reload();
+    })
+    .catch(function (error) {
+        console.log(error);
+        alert(error);
+    });
+}
+
 function onRecover() {
     axios.put(apiBaseUrl + '/v1/users/password', {
         email: document.getElementById('email').value,

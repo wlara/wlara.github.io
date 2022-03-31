@@ -24,7 +24,8 @@
     <p>
     <div class="fb-login-button" data-width="150" data-size="medium" data-button-type="login_with" data-layout="default"
          data-auto-logout-link="false" data-use-continue-as="false" data-onlogin="onFacebookLogin"
-         data-scope="public_profile,email">Login with Facebook</div>
+         data-scope="public_profile,email">Login with Facebook
+    </div>
     </p>
     <hr/>
     <p><a href="join.html">Join</a></p>
@@ -36,11 +37,10 @@
     <p><a href="profile.html">Profile</a></p>
     <p><a href="songs.html">Songs</a></p>
     <hr>
-    <form action="javascript:onLogout()">
-        <p>
-            <button type="submit">Logout</button>
-        </p>
-    </form>
+    <p>
+        <button onclick="onLogout()">Logout</button>
+        <button onclick="onDelete()">Delete Account</button>
+    </p>
 </div>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js" async></script>
