@@ -176,7 +176,7 @@ function onLoadJwt() {
 }
 
 function onLoadSongs() {
-    axios.get(apiBaseUrl + '/v1/portal/songs', {
+    axios.get(apiBaseUrl + '/v1/songs', {
         withCredentials: true,
         headers: {
             'Authorization': getBearerAuth()
