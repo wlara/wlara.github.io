@@ -10,12 +10,12 @@ function onLoadHome() {
 }
 
 function onLogin() {
-    axios.post(apiBaseUrl + '/login', {
+    axios.post(apiBaseUrl + '/v1/auth/login', {
         email: document.getElementById('email').value,
         password: document.getElementById('password').value
     })
     .then(function (response) {
-        localStorage['token'] = response.data['token']
+        localStorage['token'] = response.data['accessToken']
         console.log(response);
         location.reload();
     })
@@ -26,12 +26,12 @@ function onLogin() {
 }
 
 function onGoogleLogin(googleUser) {
-    axios.post(apiBaseUrl + '/login/google', {
+    axios.post(apiBaseUrl + '/v1/auth/login/google', {
         accessToken: googleUser.getAuthResponse().access_token
     })
     .then(function (response) {
         gapi.auth2.getAuthInstance().signOut();
-        localStorage['token'] = response.data['token']
+        localStorage['token'] = response.data['accessToken']
         console.log(response);
         location.reload();
     })
@@ -45,11 +45,11 @@ function onGoogleLogin(googleUser) {
 function onFacebookLogin() {
    FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
-            axios.post(apiBaseUrl + '/login/facebook', {
+            axios.post(apiBaseUrl + '/v1/auth/login/facebook', {
                 accessToken: response.authResponse.accessToken
             })
             .then(function (response) {
-                localStorage['token'] = response.data['token']
+                localStorage['token'] = response.data['accessToken']
                 console.log(response);
                 location.reload();
             })
@@ -128,7 +128,7 @@ function onRecover() {
 
 function onVerificationCode() {
     const email = document.getElementById('email').value
-    axios.get(apiBaseUrl + '/auth/code', {
+    axios.get(apiBaseUrl + '/v1/auth/code', {
         params: { email: email }
     })
     .then(function (response) {
@@ -159,7 +159,7 @@ function onLoadProfile() {
 }
 
 function onLoadJwt() {
-    axios.get(apiBaseUrl + '/auth/jwt', {
+    axios.get(apiBaseUrl + '/v1/auth/jwt', {
         withCredentials: true,
         headers: {
             'Authorization': getBearerAuth()
