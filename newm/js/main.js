@@ -70,9 +70,12 @@ function onLogout() {
 
 function onJoin() {
     axios.put(apiBaseUrl + '/v1/users', {
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
+        firstName: document.getElementById('firstName').value.nullIfEmpty(),
+        lastName: document.getElementById('lastName').value.nullIfEmpty(),
+        nickname: document.getElementById('nickname').value.nullIfEmpty(),
         pictureUrl: document.getElementById('pictureUrl').value.nullIfEmpty(),
+        role: document.getElementById('role').value.nullIfEmpty(),
+        genres: document.getElementById('genres').value.split(",").filter(e => e).nullIfEmpty(),
         email: document.getElementById('email').value,
         newPassword: document.getElementById('newPassword').value,
         confirmPassword: document.getElementById('confirmPassword').value,
@@ -209,5 +212,9 @@ function loadJsonTable(tableId, jsonData) {
 }
 
 String.prototype.nullIfEmpty = function() {
-    return this == '' ? null : this;
+    return this.length > 0 ? this : null;
+}
+
+Array.prototype.nullIfEmpty = function() {
+    return this.length > 0 ? this : null;
 }
