@@ -75,7 +75,7 @@ function onJoin() {
         nickname: document.getElementById('nickname').value.nullIfEmpty(),
         pictureUrl: document.getElementById('pictureUrl').value.nullIfEmpty(),
         role: document.getElementById('role').value.nullIfEmpty(),
-        genres: document.getElementById('genres').value.split(",").filter(e => e).nullIfEmpty(),
+        genre: document.getElementById('genre').value.nullIfEmpty(),
         email: document.getElementById('email').value,
         newPassword: document.getElementById('newPassword').value,
         confirmPassword: document.getElementById('confirmPassword').value,
