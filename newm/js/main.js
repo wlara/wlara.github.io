@@ -1,5 +1,5 @@
 const homePath = '/newm'
-const apiBaseUrl = 'https://staging-newm-server.herokuapp.com'
+const apiBaseUrl = 'https://garage.newm.io'
 
 function onLoadHome() {
     if (localStorage.getItem('token') == null) {
@@ -69,7 +69,7 @@ function onLogout() {
 }
 
 function onJoin() {
-    axios.put(apiBaseUrl + '/v1/users', {
+    axios.post(apiBaseUrl + '/v1/users', {
         firstName: document.getElementById('firstName').value.nullIfEmpty(),
         lastName: document.getElementById('lastName').value.nullIfEmpty(),
         nickname: document.getElementById('nickname').value.nullIfEmpty(),
