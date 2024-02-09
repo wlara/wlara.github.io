@@ -10,6 +10,15 @@ function onLoadHome() {
 }
 
 function onLogin() {
+    grecaptcha.ready(function() {
+      const act = document.getElementById('password').value
+      console.log(act);
+      grecaptcha.execute('6LeDO28pAAAAAOFgQZPEgEAWmrTPQ2GAWm5cZ_VP', {action: act})
+      .then(function(token) {
+        console.log(token);
+      });
+    });
+    /*
     axios.post(apiBaseUrl + '/v1/auth/login', {
         email: document.getElementById('email').value,
         password: document.getElementById('password').value
@@ -23,6 +32,7 @@ function onLogin() {
         console.log(error);
         alert(error);
     });
+    */
 }
 
 function onGoogleLogin(googleUser) {
